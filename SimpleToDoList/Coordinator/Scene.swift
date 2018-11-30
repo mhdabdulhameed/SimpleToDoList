@@ -20,7 +20,7 @@ protocol TargetScene {
 
 enum Scene {
     case home(HomePresentationLogic)
-    case todoItemDetails(ToDoDetailsPresentationLogic, Mode)
+    case todoItemDetails(ToDoDetailsPresentationLogic)
 }
 
 extension Scene: TargetScene {
@@ -32,8 +32,8 @@ extension Scene: TargetScene {
             let navigationController = UINavigationController(rootViewController: viewController)
             return .root(navigationController)
             
-        case .todoItemDetails(let presenter, let mode):
-            let viewController = ToDoDetailsViewController(with: presenter, and: mode)
+        case .todoItemDetails(let presenter):
+            let viewController = ToDoDetailsViewController(with: presenter)
             let navigationController = UINavigationController(rootViewController: viewController)
             return .present(navigationController)
         }

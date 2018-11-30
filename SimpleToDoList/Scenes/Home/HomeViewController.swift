@@ -92,11 +92,11 @@ final class HomeViewController: BaseViewController {
     
     /// Add new todo item bar button item action.
     @objc private func addButtonTapped() {
-        presenter.goToAddScene()
+        presenter.goToAddScene(with: nil)
     }
     
     private func editToDoItem(at indexPath: IndexPath) {
-        print("Edit tapped")
+        presenter.goToAddScene(with: todoList[indexPath.row])
     }
     
     private func deleteToDoItem(at indexPath: IndexPath) {
@@ -160,7 +160,14 @@ extension HomeViewController: ToDoTableViewCellDelegate {
 
 extension HomeViewController: HomeViewLogic {
     func updateItem(of id: String, with title: String) {
-        
+        todoList.enumerated().forEach { index, element in
+            if element.id == id {
+                element.title = title
+                DispatchQueue.main.async { [weak self] in
+                    self?.todosTableView.reloadRows(at: [IndexPath(item: index, section: 0)], with: .automatic)
+                }
+            }
+        }
     }
     
     func addNewItem(item: ToDoItemViewModel) {

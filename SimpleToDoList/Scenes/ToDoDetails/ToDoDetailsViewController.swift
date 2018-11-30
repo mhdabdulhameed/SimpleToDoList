@@ -8,17 +8,11 @@
 
 import UIKit
 
-enum Mode {
-    case add
-    case edit
-}
-
 final class ToDoDetailsViewController: UIViewController {
     
     // MARK: - Private Properties
     
     private let presenter: ToDoDetailsPresentationLogic
-    private let mode: Mode
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
@@ -48,9 +42,8 @@ final class ToDoDetailsViewController: UIViewController {
         return barButtonItem
     }()
     
-    init(with presenter: ToDoDetailsPresentationLogic, and mode: Mode) {
+    init(with presenter: ToDoDetailsPresentationLogic) {
         self.presenter = presenter
-        self.mode = mode
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -67,15 +60,9 @@ final class ToDoDetailsViewController: UIViewController {
     private func initializeUI() {
         view.backgroundColor = .white
         
-        switch mode {
-        case .add:
-            titleLabel.text = "Enter a title for the new item"
-            confirmButton.setTitle("Done", for: [])
-        case .edit:
-            titleLabel.text = "Enter a title to update the old title with"
-            confirmButton.setTitle("Update", for: [])
-        }
-        
+        titleLabel.text = presenter.getTitleLabelText()
+        confirmButton.setTitle(presenter.getConfirmButtonTitleText(), for: [])
+        titleTextField.text = presenter.getTitleTextFieldText()
         titleTextField.placeholder = "New Name"
         
         title = Constants.ToDoDetailsConstants.title
@@ -128,12 +115,7 @@ final class ToDoDetailsViewController: UIViewController {
     }
     
     @objc private func confirmButtonTapped() {
-        switch mode {
-        case .add:
-            presenter.addToDoItem(title: titleTextField.text!)
-        case .edit:
-            print("Confirm for edit")
-        }
+        presenter.confirmButtonTapped(with: titleTextField.text!)
     }
     
     @objc private func cancelButtonTapped() {

@@ -11,10 +11,14 @@ import Foundation
 protocol ToDoDetailsPresentationLogic: class {
     
     var delegate: ToDoDetailsPresenterDelegate? { get set }
+    var toDoItem: ToDoItemViewModel? { get set }
     
     func dismiss()
-    func addToDoItem(title: String)
-    func editToDoItem(of id: String, with title: String, and completed: Bool)
+    func confirmButtonTapped(with title: String)
+    
+    func getTitleLabelText() -> String
+    func getTitleTextFieldText() -> String?
+    func getConfirmButtonTitleText() -> String
 }
 
 final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
@@ -22,7 +26,11 @@ final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
     weak var delegate: ToDoDetailsPresenterDelegate?
     private let networkManager: NetworkManagerType
     private let activityIndicator: ActivityIndicatorType
-    private let toDoItem: ToDoItemViewModel?
+    var toDoItem: ToDoItemViewModel?
+    
+    private var isEditting: Bool {
+        return toDoItem != nil
+    }
     
     init(networkManager: NetworkManagerType = MoyaNetworkManager.shared, activityIndicator: ActivityIndicatorType = SVActivityIndicator.shared, toDoItem: ToDoItemViewModel? = nil) {
         self.networkManager = networkManager
@@ -36,7 +44,37 @@ final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
         }
     }
     
-    func addToDoItem(title: String) {
+    func confirmButtonTapped(with title: String) {
+        if let toDoItem = toDoItem {
+            // Edit
+            editToDoItem(of: toDoItem.id, with: title, and: toDoItem.completed)
+        } else {
+            // Add
+            addNewToDoItem(with: title)
+        }
+    }
+    
+    func getTitleLabelText() -> String {
+        if isEditting {
+            return "Update the name of your to do item"
+        } else {
+            return "Enter the title of the new to do item"
+        }
+    }
+    
+    func getTitleTextFieldText() -> String? {
+        return toDoItem?.title
+    }
+    
+    func getConfirmButtonTitleText() -> String {
+        if isEditting {
+            return "Update"
+        } else {
+            return "Add"
+        }
+    }
+    
+    private func addNewToDoItem(with title: String) {
         let requestOnComplete: (Result<ToDoItem>) -> Void = { [weak self] result in
             self?.activityIndicator.dismiss()
             switch result {
@@ -54,7 +92,7 @@ final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
         dismiss()
     }
     
-    func editToDoItem(of id: String, with title: String, and completed: Bool) {
+    private func editToDoItem(of id: String, with title: String, and completed: Bool) {
         let requestOnComplete: (Result<ToDoItem>) -> Void = { [weak self] result in
             self?.activityIndicator.dismiss()
             switch result {

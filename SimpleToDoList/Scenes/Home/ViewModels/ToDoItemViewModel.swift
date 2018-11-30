@@ -8,7 +8,7 @@
 
 class ToDoItemViewModel {
     let id: String
-    let title: String
+    var title: String
     var completed: Bool
     
     init(with model: ToDoItem) {

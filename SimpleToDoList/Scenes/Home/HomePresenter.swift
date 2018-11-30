@@ -12,7 +12,7 @@ protocol HomePresentationLogic: class {
     
     var view: HomeViewLogic? { get set }
     
-    func goToAddScene()
+    func goToAddScene(with viewModel: ToDoItemViewModel?)
     func getToDoList(onComplete: @escaping ([ToDoItemViewModel]) -> Void)
     func deleteToDoItem(with id: String, onComplete: @escaping (Bool) -> Void)
     func markToDoItemCompleted(with id: String, title: String, completed: Bool, onComplete: @escaping (Bool) -> Void)
@@ -34,10 +34,11 @@ final class HomePresenter: HomePresentationLogic {
         self.activityIndicator = activityIndicator
     }
     
-    func goToAddScene() {
+    func goToAddScene(with viewModel: ToDoItemViewModel?) {
         let presenter = ToDoDetailsPresenter()
         presenter.delegate = self
-        let scene = Scene.todoItemDetails(presenter, .add)
+        presenter.toDoItem = viewModel
+        let scene = Scene.todoItemDetails(presenter)
         SceneCoordinator.shared.transition(to: scene) {
             
         }
