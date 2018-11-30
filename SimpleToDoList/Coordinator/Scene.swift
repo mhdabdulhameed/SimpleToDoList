@@ -28,6 +28,7 @@ extension Scene: TargetScene {
         switch self {
         case .home(let presenter):
             let viewController = HomeViewController(with: presenter)
+            presenter.view = viewController
             let navigationController = UINavigationController(rootViewController: viewController)
             return .root(navigationController)
             

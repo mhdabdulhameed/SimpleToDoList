@@ -10,7 +10,7 @@ import Moya
 
 enum API {
     case todos
-    case addToDo(title: String, order: Int, completed: Bool)
+    case addToDo(title: String)
     case deleteToDo(id: String)
     case update(id: String, title: String, completed: Bool)
 }
@@ -25,7 +25,7 @@ extension API: TargetType {
     
     var path: String {
         switch self {
-        case .todos, .addToDo(_, _, _):
+        case .todos, .addToDo:
             return ""
         case .deleteToDo(let id), .update(let id, _, _):
             return "\(id)"
@@ -54,11 +54,11 @@ extension API: TargetType {
         case .todos:
             return .requestPlain
             
-        case .addToDo(let title, let order, let completed):
+        case .addToDo(let title):
             let parameters: [String: Any] = [
                 "title": title,
-                "order": order,
-                "completed": completed
+                "order": 1,
+                "completed": false
             ]
             return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
             

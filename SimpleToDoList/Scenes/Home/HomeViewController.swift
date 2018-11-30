@@ -12,6 +12,11 @@ protocol ToDoTableViewCellDelegate: class {
     func didTapCheckBox(with tag: Int, didChangeStatusSuccessfully: @escaping (Bool) -> Void)
 }
 
+protocol HomeViewLogic: class {
+    func updateItem(of id: String, with title: String)
+    func addNewItem(item: ToDoItemViewModel)
+}
+
 final class HomeViewController: BaseViewController {
     
     // MARK: - Private Properties
@@ -106,7 +111,7 @@ final class HomeViewController: BaseViewController {
 
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+        return 60.0
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -150,5 +155,19 @@ extension HomeViewController: ToDoTableViewCellDelegate {
         presenter.markToDoItemCompleted(with: todoItem.id, title: todoItem.title, completed: !todoItem.completed) { success in
             didChangeStatusSuccessfully(success)
         }
+    }
+}
+
+extension HomeViewController: HomeViewLogic {
+    func updateItem(of id: String, with title: String) {
+        
+    }
+    
+    func addNewItem(item: ToDoItemViewModel) {
+        todoList.append(item)
+        todosTableView.performBatchUpdates({ [weak self] in
+            guard let self = self else { return }
+            self.todosTableView.insertRows(at: [IndexPath(item: self.todoList.count - 1, section: 0)], with: .automatic)
+        })
     }
 }

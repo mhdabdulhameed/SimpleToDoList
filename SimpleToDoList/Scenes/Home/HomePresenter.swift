@@ -10,14 +10,22 @@ import Foundation
 
 protocol HomePresentationLogic: class {
     
+    var view: HomeViewLogic? { get set }
+    
     func goToAddScene()
     func getToDoList(onComplete: @escaping ([ToDoItemViewModel]) -> Void)
     func deleteToDoItem(with id: String, onComplete: @escaping (Bool) -> Void)
     func markToDoItemCompleted(with id: String, title: String, completed: Bool, onComplete: @escaping (Bool) -> Void)
 }
 
+protocol ToDoDetailsPresenterDelegate: class {
+    func newToDoItemAdded(item: ToDoItem)
+    func updateToDoItem(item: ToDoItem)
+}
+
 final class HomePresenter: HomePresentationLogic {
     
+    weak var view: HomeViewLogic?
     private let networkManager: NetworkManagerType
     private let activityIndicator: ActivityIndicatorType
     
@@ -28,6 +36,7 @@ final class HomePresenter: HomePresentationLogic {
     
     func goToAddScene() {
         let presenter = ToDoDetailsPresenter()
+        presenter.delegate = self
         let scene = Scene.todoItemDetails(presenter, .add)
         SceneCoordinator.shared.transition(to: scene) {
             
@@ -69,5 +78,15 @@ final class HomePresenter: HomePresentationLogic {
         }
         
         networkManager.startRequest(api: .update(id: id, title: title, completed: completed), onComplete: requestOnComplete)
+    }
+}
+
+extension HomePresenter: ToDoDetailsPresenterDelegate {
+    func newToDoItemAdded(item: ToDoItem) {
+        view?.addNewItem(item: ToDoItemViewModel(with: item))
+    }
+    
+    func updateToDoItem(item: ToDoItem) {
+        view?.updateItem(of: item.id, with: item.title)
     }
 }

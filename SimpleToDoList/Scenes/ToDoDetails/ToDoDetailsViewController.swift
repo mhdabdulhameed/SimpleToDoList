@@ -130,7 +130,7 @@ final class ToDoDetailsViewController: UIViewController {
     @objc private func confirmButtonTapped() {
         switch mode {
         case .add:
-            print("Confirm for add")
+            presenter.addToDoItem(title: titleTextField.text!)
         case .edit:
             print("Confirm for edit")
         }
