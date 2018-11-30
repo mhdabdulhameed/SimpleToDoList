@@ -10,12 +10,9 @@ import Foundation
 
 protocol HomePresentationLogic: class {
     
-    /// Gets a list of the movies that being played in the cinemas now.
-    ///
-    /// - Parameters:
-    ///   - page: The page number to retrieve.
-    ///   - onComplete: A completion handler that takes an instance of `MoviesListViewModel` which contains the page's elements.
     func getToDoList(onComplete: @escaping ([ToDoItemViewModel]) -> Void)
+    func deleteToDoItem(with id: String, onComplete: @escaping (Bool) -> Void)
+    func markToDoItemCompleted(with id: String, title: String, completed: Bool, onComplete: @escaping (Bool) -> Void)
 }
 
 final class HomePresenter: HomePresentationLogic {
@@ -33,8 +30,8 @@ final class HomePresenter: HomePresentationLogic {
         let requestOnComplete: (Result<[ToDoItem]>) -> Void = { [weak self] result in
             self?.activityIndicator.dismiss()
             switch result {
-            case .success(let moviesList):
-                onComplete(moviesList.map { ToDoItemViewModel(with: $0) })
+            case .success(let todoList):
+                onComplete(todoList.map { ToDoItemViewModel(with: $0) })
             case .failure(let error):
                 // TODO show error.
                 print(error)
@@ -42,5 +39,26 @@ final class HomePresenter: HomePresentationLogic {
         }
         
         networkManager.startRequest(api: .todos, onComplete: requestOnComplete)
+    }
+    
+    func deleteToDoItem(with id: String, onComplete: @escaping (Bool) -> Void) {
+        onComplete(true)
+    }
+    
+    func markToDoItemCompleted(with id: String, title: String, completed: Bool, onComplete: @escaping (Bool) -> Void) {
+        activityIndicator.show()
+        let requestOnComplete: (Result<ToDoItem>) -> Void = { [weak self] result in
+            self?.activityIndicator.dismiss()
+            switch result {
+            case .success(_):
+                onComplete(true)
+            case .failure(let error):
+                // TODO show error.
+                onComplete(false)
+                print(error)
+            }
+        }
+        
+        networkManager.startRequest(api: .update(id: id, title: title, completed: completed), onComplete: requestOnComplete)
     }
 }

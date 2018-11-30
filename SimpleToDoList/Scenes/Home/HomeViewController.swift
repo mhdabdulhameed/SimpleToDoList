@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ToDoTableViewCellDelegate: class {
+    func didTapCheckBox(with tag: Int, didChangeStatusSuccessfully: @escaping (Bool) -> Void)
+}
+
 final class HomeViewController: BaseViewController {
     
     // MARK: - Private Properties
@@ -21,6 +25,7 @@ final class HomeViewController: BaseViewController {
         tableView.register(ToDoTableViewCell.self, forCellReuseIdentifier: ToDoTableViewCell.reuseIdentifier)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.allowsSelection = false
         tableView.tableFooterView = UIView(frame: .zero)
         return tableView
     }()
@@ -84,6 +89,19 @@ final class HomeViewController: BaseViewController {
     @objc private func addButtonTapped() {
         print("Add")
     }
+    
+    private func editToDoItem(at indexPath: IndexPath) {
+        print("Edit tapped")
+    }
+    
+    private func deleteToDoItem(at indexPath: IndexPath) {
+        presenter.deleteToDoItem(with: todoList[indexPath.row].id) { [weak self] success in
+            self?.todoList.remove(at: indexPath.row)
+            self?.todosTableView.performBatchUpdates({ [weak self] in
+                self?.todosTableView.deleteRows(at: [indexPath], with: .automatic)
+            })
+        }
+    }
 }
 
 extension HomeViewController: UITableViewDelegate {
@@ -98,14 +116,14 @@ extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         // Edit
-        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { action, indexPath in
-            print("Edit tapped")
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { [weak self] action, indexPath in
+            self?.editToDoItem(at: indexPath)
         }
         editAction.backgroundColor = .lightGray
         
         // Delete
-        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { action, indexPath in
-            print("Delete tapped")
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { [weak self] action, indexPath in
+            self?.deleteToDoItem(at: indexPath)
         }
         deleteAction.backgroundColor = .red
         
@@ -120,7 +138,17 @@ extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ToDoTableViewCell.reuseIdentifier, for: indexPath) as? ToDoTableViewCell else { return UITableViewCell() }
-        cell.configure(with: todoList[indexPath.row])
+        cell.configure(with: self, and: todoList[indexPath.row])
+        cell.tag = indexPath.row
         return cell
+    }
+}
+
+extension HomeViewController: ToDoTableViewCellDelegate {
+    func didTapCheckBox(with tag: Int, didChangeStatusSuccessfully: @escaping (Bool) -> Void) {
+        let todoItem = todoList[tag]
+        presenter.markToDoItemCompleted(with: todoItem.id, title: todoItem.title, completed: !todoItem.completed) { success in
+            didChangeStatusSuccessfully(success)
+        }
     }
 }

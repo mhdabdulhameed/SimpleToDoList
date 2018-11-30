@@ -10,9 +10,6 @@ extension Constants {
     enum ApiConstants {
         
         /// Base URL
-        static let baseURL = "https://todo-backend-modern-js.herokuapp.com/"
-        
-        /// Todos Path
-        static let todosPath = "todos"
+        static let baseURL = "https://todo-backend-modern-js.herokuapp.com/todos/"
     }
 }

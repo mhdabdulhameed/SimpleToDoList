@@ -13,6 +13,8 @@ final class ToDoTableViewCell: UITableViewCell {
     
     // MARK: - Private Properties
     
+    private weak var delegate: ToDoTableViewCellDelegate?
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -21,11 +23,11 @@ final class ToDoTableViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var completedCheckBox: UIButton = {
-        let button = UIButton(frame: .zero)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(nil, for: [])
-        return button
+    private lazy var completedSwitch: UISwitch = {
+        let completedSwitch = UISwitch(frame: .zero)
+        completedSwitch.translatesAutoresizingMaskIntoConstraints = false
+        completedSwitch.addTarget(self, action: #selector(completedSwitchValueChanged), for: .valueChanged)
+        return completedSwitch
     }()
     
     // MARK: - Initialization
@@ -33,7 +35,7 @@ final class ToDoTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addCompletedCheckBox()
+        addcompletedSwitch()
         addTitleLabel()
     }
     
@@ -43,10 +45,10 @@ final class ToDoTableViewCell: UITableViewCell {
     
     // MARK: - Configuration
     
-    func configure(with viewModel: ToDoItemViewModel) {
+    func configure(with delegate: ToDoTableViewCellDelegate, and viewModel: ToDoItemViewModel) {
+        self.delegate = delegate
         titleLabel.text = viewModel.title
-        let image = viewModel.completed ? UIImage(named: "ItemChecked")! : UIImage(named: "ItemNotChecked")!
-        completedCheckBox.setImage(image, for: [])
+        completedSwitch.isOn = viewModel.completed
     }
     
     // MARK: - Private Methods
@@ -59,23 +61,31 @@ final class ToDoTableViewCell: UITableViewCell {
     private func setupTitleLabelConstraints() {
         titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 15).isActive = true
         titleLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: completedCheckBox.leftAnchor, constant: 15).isActive = true
+        titleLabel.rightAnchor.constraint(equalTo: completedSwitch.leftAnchor, constant: 15).isActive = true
         titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
         layoutIfNeeded()
     }
     
-    private func addCompletedCheckBox() {
-        addSubview(completedCheckBox)
-        setupCompletedCheckBoxConstraints()
+    private func addcompletedSwitch() {
+        addSubview(completedSwitch)
+        setupcompletedSwitchConstraints()
     }
     
-    private func setupCompletedCheckBoxConstraints() {
-        completedCheckBox.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        completedCheckBox.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        completedCheckBox.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        completedCheckBox.widthAnchor.constraint(equalToConstant: 60.0).isActive = true
+    private func setupcompletedSwitchConstraints() {
+        completedSwitch.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        completedSwitch.widthAnchor.constraint(equalToConstant: 60.0).isActive = true
+        completedSwitch.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
+        completedSwitch.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
         layoutIfNeeded()
+    }
+    
+    @objc private func completedSwitchValueChanged() {
+        delegate?.didTapCheckBox(with: tag) { [weak self] success in
+            if !success {
+                self?.completedSwitch.isOn = false
+            }
+        }
     }
 }

@@ -10,6 +10,9 @@ import Moya
 
 enum API {
     case todos
+    case addToDo(title: String, order: Int, completed: Bool)
+    case deleteToDo(id: String)
+    case update(id: String, title: String, completed: Bool)
 }
 
 extension API: TargetType {
@@ -22,8 +25,10 @@ extension API: TargetType {
     
     var path: String {
         switch self {
-        case .todos:
-            return Constants.ApiConstants.todosPath
+        case .todos, .addToDo(_, _, _):
+            return ""
+        case .deleteToDo(let id), .update(let id, _, _):
+            return "\(id)"
         }
     }
     
@@ -31,6 +36,12 @@ extension API: TargetType {
         switch self {
         case .todos:
             return .get
+        case .addToDo:
+            return .post
+        case .deleteToDo:
+            return .delete
+        case .update:
+            return .patch
         }
     }
     
@@ -42,12 +53,30 @@ extension API: TargetType {
         switch self {
         case .todos:
             return .requestPlain
+            
+        case .addToDo(let title, let order, let completed):
+            let parameters: [String: Any] = [
+                "title": title,
+                "order": order,
+                "completed": completed
+            ]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
+            
+        case .deleteToDo:
+            return .requestPlain
+            
+        case .update(_, let title, let completed):
+            let parameters: [String: Any] = [
+                "title": title,
+                "completed": completed
+            ]
+            return .requestParameters(parameters: parameters, encoding: JSONEncoding.default)
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case .todos:
+        case .todos, .addToDo, .deleteToDo, .update:
             return nil
         }
     }
