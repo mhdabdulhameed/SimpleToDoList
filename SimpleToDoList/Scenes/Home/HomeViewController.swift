@@ -13,10 +13,12 @@ final class HomeViewController: BaseViewController {
     // MARK: - Private Properties
     
     private let presenter: HomePresentationLogic
+    private var todoList = [ToDoItemViewModel]()
     
     private lazy var todosTableView: UITableView = {
         let tableView = UITableView(frame: .zero)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(ToDoTableViewCell.self, forCellReuseIdentifier: ToDoTableViewCell.reuseIdentifier)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView(frame: .zero)
@@ -42,6 +44,7 @@ final class HomeViewController: BaseViewController {
         super.viewDidLoad()
         
         initializeUI()
+        getToDoList()
     }
     
     // MARK: - Private Methods
@@ -53,6 +56,14 @@ final class HomeViewController: BaseViewController {
         navigationItem.rightBarButtonItem = addBarButtonItem
         
         addTodosTableViewView()
+    }
+    
+    private func getToDoList() {
+        presenter.getToDoList() { [weak self] todoList in
+            guard let self = self else { return }
+            self.todoList = todoList
+            self.todosTableView.reloadData()
+        }
     }
     
     /// Adds `todosTableView` to the view hierarchy and setups its constraints.
@@ -76,15 +87,40 @@ final class HomeViewController: BaseViewController {
 }
 
 extension HomeViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44.0
+    }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        // Edit
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { action, indexPath in
+            print("Edit tapped")
+        }
+        editAction.backgroundColor = .lightGray
+        
+        // Delete
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { action, indexPath in
+            print("Delete tapped")
+        }
+        deleteAction.backgroundColor = .red
+        
+        return [deleteAction, editAction]
+    }
 }
 
 extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return todoList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell(frame: .zero)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ToDoTableViewCell.reuseIdentifier, for: indexPath) as? ToDoTableViewCell else { return UITableViewCell() }
+        cell.configure(with: todoList[indexPath.row])
+        return cell
     }
 }

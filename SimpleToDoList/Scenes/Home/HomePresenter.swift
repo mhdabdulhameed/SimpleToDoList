@@ -15,7 +15,7 @@ protocol HomePresentationLogic: class {
     /// - Parameters:
     ///   - page: The page number to retrieve.
     ///   - onComplete: A completion handler that takes an instance of `MoviesListViewModel` which contains the page's elements.
-//    func getToDoList(onComplete: @escaping (MoviesListViewModel) -> Void)
+    func getToDoList(onComplete: @escaping ([ToDoItemViewModel]) -> Void)
 }
 
 final class HomePresenter: HomePresentationLogic {
@@ -24,5 +24,19 @@ final class HomePresenter: HomePresentationLogic {
     
     init(networkManager: NetworkManagerType = MoyaNetworkManager.shared) {
         self.networkManager = networkManager
+    }
+    
+    func getToDoList(onComplete: @escaping ([ToDoItemViewModel]) -> Void) {
+        let requestOnComplete: (Result<[ToDoItem]>) -> Void = { result in
+            switch result {
+            case .success(let moviesList):
+                onComplete(moviesList.map { ToDoItemViewModel(with: $0) })
+            case .failure(let error):
+                // TODO show error.
+                print(error)
+            }
+        }
+        
+        networkManager.startRequest(api: .todos, onComplete: requestOnComplete)
     }
 }
