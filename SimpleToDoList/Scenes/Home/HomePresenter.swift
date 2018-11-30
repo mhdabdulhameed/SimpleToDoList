@@ -10,6 +10,7 @@ import Foundation
 
 protocol HomePresentationLogic: class {
     
+    func goToAddScene()
     func getToDoList(onComplete: @escaping ([ToDoItemViewModel]) -> Void)
     func deleteToDoItem(with id: String, onComplete: @escaping (Bool) -> Void)
     func markToDoItemCompleted(with id: String, title: String, completed: Bool, onComplete: @escaping (Bool) -> Void)
@@ -23,6 +24,14 @@ final class HomePresenter: HomePresentationLogic {
     init(networkManager: NetworkManagerType = MoyaNetworkManager.shared, activityIndicator: ActivityIndicatorType = SVActivityIndicator.shared) {
         self.networkManager = networkManager
         self.activityIndicator = activityIndicator
+    }
+    
+    func goToAddScene() {
+        let presenter = ToDoDetailsPresenter()
+        let scene = Scene.todoItemDetails(presenter, .add)
+        SceneCoordinator.shared.transition(to: scene) {
+            
+        }
     }
     
     func getToDoList(onComplete: @escaping ([ToDoItemViewModel]) -> Void) {

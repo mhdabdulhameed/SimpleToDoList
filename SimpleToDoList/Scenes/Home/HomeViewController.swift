@@ -35,7 +35,6 @@ final class HomeViewController: BaseViewController {
         return barButtonItem
     }()
     
-    /// Initialize `NowPlayingViewController` with a `NowPlayingPresentationLogic` instance.
     init(with presenter: HomePresentationLogic) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -59,6 +58,7 @@ final class HomeViewController: BaseViewController {
         // Title
         title = Constants.HomeConstants.title
         navigationItem.rightBarButtonItem = addBarButtonItem
+        navigationController?.navigationBar.prefersLargeTitles = true
         
         addTodosTableViewView()
     }
@@ -87,7 +87,7 @@ final class HomeViewController: BaseViewController {
     
     /// Add new todo item bar button item action.
     @objc private func addButtonTapped() {
-        print("Add")
+        presenter.goToAddScene()
     }
     
     private func editToDoItem(at indexPath: IndexPath) {

@@ -1,5 +1,5 @@
 //
-//  HomeConstants.swift
+//  ToDoDetailsConstants.swift
 //  SimpleToDoList
 //
 //  Created by Mohamed Abdul-Hameed on 11/30/18.
@@ -7,8 +7,8 @@
 //
 
 extension Constants {
-    enum HomeConstants {
+    enum ToDoDetailsConstants {
         
-        static let title = "To Do Items"
+        static let title = "To Do Item Details"
     }
 }

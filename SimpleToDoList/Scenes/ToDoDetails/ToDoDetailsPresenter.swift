@@ -10,12 +10,7 @@ import Foundation
 
 protocol ToDoDetailsPresentationLogic: class {
     
-    /// Gets a list of the movies that being played in the cinemas now.
-    ///
-    /// - Parameters:
-    ///   - page: The page number to retrieve.
-    ///   - onComplete: A completion handler that takes an instance of `MoviesListViewModel` which contains the page's elements.
-    //    func getToDoList(onComplete: @escaping (MoviesListViewModel) -> Void)
+    func dismiss()
 }
 
 final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
@@ -26,5 +21,11 @@ final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
     init(networkManager: NetworkManagerType = MoyaNetworkManager.shared, toDoItem: ToDoItemViewModel? = nil) {
         self.networkManager = networkManager
         self.toDoItem = toDoItem
+    }
+    
+    func dismiss() {
+        SceneCoordinator.shared.pop(animated: true) {
+            
+        }
     }
 }
