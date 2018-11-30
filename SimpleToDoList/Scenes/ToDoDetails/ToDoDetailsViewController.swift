@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class ToDoDetailsViewController: BaseViewController {
+final class ToDoDetailsViewController: UIAlertController {
     
     // MARK: - Private Properties
     

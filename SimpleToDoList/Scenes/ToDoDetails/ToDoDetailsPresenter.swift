@@ -21,8 +21,10 @@ protocol ToDoDetailsPresentationLogic: class {
 final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
     
     private let networkManager: NetworkManagerType
+    private let toDoItem: ToDoItemViewModel?
     
-    init(networkManager: NetworkManagerType = MoyaNetworkManager.shared) {
+    init(networkManager: NetworkManagerType = MoyaNetworkManager.shared, toDoItem: ToDoItemViewModel? = nil) {
         self.networkManager = networkManager
+        self.toDoItem = toDoItem
     }
 }

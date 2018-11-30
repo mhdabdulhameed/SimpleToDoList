@@ -27,7 +27,7 @@ extension API: TargetType {
         }
     }
     
-    var method: Method {
+    var method: Moya.Method {
         switch self {
         case .todos:
             return .get

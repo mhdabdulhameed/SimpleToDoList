@@ -8,6 +8,7 @@ target 'SimpleToDoList' do
   # Pods for SimpleToDoList
   
   pod 'Moya'
+  pod 'SVProgressHUD'
 
   target 'SimpleToDoListTests' do
     inherit! :search_paths

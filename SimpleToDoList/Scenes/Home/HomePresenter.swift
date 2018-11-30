@@ -21,13 +21,17 @@ protocol HomePresentationLogic: class {
 final class HomePresenter: HomePresentationLogic {
     
     private let networkManager: NetworkManagerType
+    private let activityIndicator: ActivityIndicatorType
     
-    init(networkManager: NetworkManagerType = MoyaNetworkManager.shared) {
+    init(networkManager: NetworkManagerType = MoyaNetworkManager.shared, activityIndicator: ActivityIndicatorType = SVActivityIndicator.shared) {
         self.networkManager = networkManager
+        self.activityIndicator = activityIndicator
     }
     
     func getToDoList(onComplete: @escaping ([ToDoItemViewModel]) -> Void) {
-        let requestOnComplete: (Result<[ToDoItem]>) -> Void = { result in
+        activityIndicator.show(with: "Getting Your To Do Items...")
+        let requestOnComplete: (Result<[ToDoItem]>) -> Void = { [weak self] result in
+            self?.activityIndicator.dismiss()
             switch result {
             case .success(let moviesList):
                 onComplete(moviesList.map { ToDoItemViewModel(with: $0) })
