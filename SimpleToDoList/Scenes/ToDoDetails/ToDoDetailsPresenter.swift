@@ -75,6 +75,7 @@ final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
     }
     
     private func addNewToDoItem(with title: String) {
+        activityIndicator.show()
         let requestOnComplete: (Result<ToDoItem>) -> Void = { [weak self] result in
             self?.activityIndicator.dismiss()
             switch result {
@@ -88,11 +89,10 @@ final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
         }
         
         networkManager.startRequest(api: .addToDo(title: title), onComplete: requestOnComplete)
-        
-        dismiss()
     }
     
     private func editToDoItem(of id: String, with title: String, and completed: Bool) {
+        activityIndicator.show()
         let requestOnComplete: (Result<ToDoItem>) -> Void = { [weak self] result in
             self?.activityIndicator.dismiss()
             switch result {
