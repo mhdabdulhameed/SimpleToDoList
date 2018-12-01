@@ -10,6 +10,14 @@ import RealmSwift
 
 final class RealmToDoService: ToDoDBServiceType {
     
+    func store(todoItem: ToDoItem) {
+        let realm = try! Realm()
+        
+        try! realm.write {
+            realm.add(todoItem)
+        }
+    }
+    
     func store(todoItems: [ToDoItem]) {
         let realm = try! Realm()
         

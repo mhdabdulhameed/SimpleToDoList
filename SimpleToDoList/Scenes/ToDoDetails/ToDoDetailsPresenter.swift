@@ -87,6 +87,17 @@ final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
     
     private func addNewToDoItem(with title: String) {
         activityIndicator.show()
+        
+        if !reachabilityManager.isReachable() {
+            cacheManager.add(operation: AddItemCacheOperation(title: title))
+            let todoItem = ToDoItem(title: title)
+            todoDBService.store(todoItem: todoItem)
+            delegate?.newToDoItemAdded(item: todoItem)
+            activityIndicator.dismiss()
+            dismiss()
+            return
+        }
+        
         let requestOnComplete: (Result<ToDoItem>) -> Void = { [weak self] result in
             self?.activityIndicator.dismiss()
             switch result {
@@ -104,6 +115,14 @@ final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
     
     private func editToDoItem(of id: String, with title: String, and completed: Bool) {
         activityIndicator.show()
+        
+        if !reachabilityManager.isReachable() {
+            cacheManager.add(operation: UpdateItemCacheOperation(id: id, title: title, completed: completed))
+            todoDBService.updateToDoItem(with: id, title: title, completed: completed)
+            activityIndicator.dismiss()
+            return
+        }
+        
         let requestOnComplete: (Result<ToDoItem>) -> Void = { [weak self] result in
             self?.activityIndicator.dismiss()
             switch result {

@@ -7,6 +7,7 @@
 //
 
 protocol ToDoDBServiceType {
+    func store(todoItem: ToDoItem)
     func store(todoItems: [ToDoItem])
     func getTodoItems() -> [ToDoItem]
     func updateToDoItem(with id: String, title: String, completed: Bool)
