@@ -18,17 +18,6 @@ class BaseViewController: UIViewController {
     
     /// A method to customize the appearance of the `BaseViewController` to give all the view controllers that inherit it a unified appearance.
     private func customizeUI() {
-        // Colors
-//        let backgroundColor = Constants.NowPlayingSceneConstants.backgroundColor
-//        let foregroundColor = Constants.NowPlayingSceneConstants.foregroundColor
-//        view.backgroundColor = backgroundColor
-//        navigationController?.navigationBar.tintColor = foregroundColor
-//        navigationController?.navigationBar.barTintColor = .clear
-//        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: foregroundColor]
-//        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: foregroundColor]
-//        
-//        // Properties
-//        navigationController?.navigationBar.prefersLargeTitles = true
-//        navigationController?.navigationBar.barStyle = .blackTranslucent
+        
     }
 }

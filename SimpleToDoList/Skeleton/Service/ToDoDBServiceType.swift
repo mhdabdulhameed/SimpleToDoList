@@ -9,4 +9,10 @@
 protocol ToDoDBServiceType {
     func store(todoItems: [ToDoItem])
     func getTodoItems() -> [ToDoItem]
+    func updateToDoItem(with id: String, title: String, completed: Bool)
+    func deleteToDoItem(with id: String)
+    func hasCacheOperations() -> Bool
+    func deleteCacheOperations()
+    func addCacheOperation(operation: ItemCacheOperation)
+    func getCacheOperations() -> [ItemCacheOperation]
 }

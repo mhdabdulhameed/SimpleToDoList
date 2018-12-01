@@ -26,15 +26,26 @@ final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
     weak var delegate: ToDoDetailsPresenterDelegate?
     private let networkManager: NetworkManagerType
     private let activityIndicator: ActivityIndicatorType
+    private let todoDBService: ToDoDBServiceType
+    private let reachabilityManager: ReachabilityManagerType
+    private let cacheManager: CacheManagerType
     var toDoItem: ToDoItemViewModel?
     
     private var isEditting: Bool {
         return toDoItem != nil
     }
     
-    init(networkManager: NetworkManagerType = MoyaNetworkManager.shared, activityIndicator: ActivityIndicatorType = SVActivityIndicator.shared, toDoItem: ToDoItemViewModel? = nil) {
+    init(networkManager: NetworkManagerType = MoyaNetworkManager.shared,
+         activityIndicator: ActivityIndicatorType = SVActivityIndicator.shared,
+         todoDBService: ToDoDBServiceType = RealmToDoService(),
+         reachabilityManager: ReachabilityManagerType = ReachabilityManager.shared,
+         cacheManager: CacheManagerType = CacheManager.shared,
+         toDoItem: ToDoItemViewModel? = nil) {
         self.networkManager = networkManager
         self.activityIndicator = activityIndicator
+        self.todoDBService = todoDBService
+        self.reachabilityManager = reachabilityManager
+        self.cacheManager = cacheManager
         self.toDoItem = toDoItem
     }
     
@@ -97,6 +108,7 @@ final class ToDoDetailsPresenter: ToDoDetailsPresentationLogic {
             self?.activityIndicator.dismiss()
             switch result {
             case .success(let todoItem):
+                self?.todoDBService.updateToDoItem(with: id, title: title, completed: completed)
                 self?.delegate?.updateToDoItem(item: todoItem)
             case .failure(let error):
                 // TODO show error.

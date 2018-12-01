@@ -14,7 +14,7 @@ final class ReachabilityManager: ReachabilityManagerType {
     
     private let reachability: Reachability
     
-    init(reachability: Reachability = Reachability()!) {
+    private init(reachability: Reachability = Reachability()!) {
         self.reachability = reachability
     }
     
