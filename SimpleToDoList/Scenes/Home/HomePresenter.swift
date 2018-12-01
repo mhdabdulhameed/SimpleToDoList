@@ -28,10 +28,12 @@ final class HomePresenter: HomePresentationLogic {
     weak var view: HomeViewLogic?
     private let networkManager: NetworkManagerType
     private let activityIndicator: ActivityIndicatorType
+    private let todoDBService: ToDoDBServiceType
     
-    init(networkManager: NetworkManagerType = MoyaNetworkManager.shared, activityIndicator: ActivityIndicatorType = SVActivityIndicator.shared) {
+    init(networkManager: NetworkManagerType = MoyaNetworkManager.shared, activityIndicator: ActivityIndicatorType = SVActivityIndicator.shared, todoDBService: ToDoDBServiceType = RealmToDoService()) {
         self.networkManager = networkManager
         self.activityIndicator = activityIndicator
+        self.todoDBService = todoDBService
     }
     
     func goToAddScene(with viewModel: ToDoItemViewModel?) {
@@ -50,6 +52,7 @@ final class HomePresenter: HomePresentationLogic {
             self?.activityIndicator.dismiss()
             switch result {
             case .success(let todoList):
+                self?.todoDBService.store(todoItems: todoList)
                 onComplete(todoList.map { ToDoItemViewModel(with: $0) })
             case .failure(let error):
                 // TODO show error.
@@ -61,6 +64,20 @@ final class HomePresenter: HomePresentationLogic {
     }
     
     func deleteToDoItem(with id: String, onComplete: @escaping (Bool) -> Void) {
+//        let requestOnComplete: (Result<()>) -> Void = { [weak self] result in
+//            self?.activityIndicator.dismiss()
+//            switch result {
+//            case .success(_):
+//                onComplete(true)
+//            case .failure(let error):
+//                // TODO show error.
+//                onComplete(false)
+//                print(error)
+//            }
+//        }
+//
+//        networkManager.startRequest(api: .deleteToDo(id: id), onComplete: requestOnComplete)
+        
         onComplete(true)
     }
     

@@ -6,12 +6,14 @@
 //  Copyright © 2018 Mohamed Abdul-Hameed. All rights reserved.
 //
 
-class ToDoItem: Codable {
-    let id: String
-    let title: String
-    let completed: Bool
-    let order: Int
-    let url: String
+import RealmSwift
+
+class ToDoItem: Object, Codable {
+    @objc dynamic var id: String
+    @objc dynamic var title: String
+    @objc dynamic var completed: Bool
+    @objc dynamic var order: Int
+    @objc dynamic var url: String
     
     private enum CodingKeys: String, CodingKey {
         case id

@@ -24,6 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window.makeKeyAndVisible()
         }
         
+        print(RealmToDoService().getTodoItems())
+        
         return true
     }
 }

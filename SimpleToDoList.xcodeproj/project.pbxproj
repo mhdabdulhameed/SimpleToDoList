@@ -34,6 +34,8 @@
 		68CDE18C21B191EC0084EA7C /* ActivityIndicatorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CDE18B21B191EC0084EA7C /* ActivityIndicatorType.swift */; };
 		68CDE18E21B1920F0084EA7C /* SVActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CDE18D21B1920F0084EA7C /* SVActivityIndicator.swift */; };
 		68CDE19321B1D5080084EA7C /* ToDoDetailsConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CDE19221B1D5080084EA7C /* ToDoDetailsConstants.swift */; };
+		68CDE19621B1FDE10084EA7C /* ToDoDBServiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CDE19521B1FDE10084EA7C /* ToDoDBServiceType.swift */; };
+		68CDE19821B1FE180084EA7C /* RealmToDoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CDE19721B1FE180084EA7C /* RealmToDoService.swift */; };
 		D9F04B8F724AF75DF544BB83 /* Pods_SimpleToDoListTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F191BA01E2B9C5773171E7D7 /* Pods_SimpleToDoListTests.framework */; };
 		EB9B25B2EF7ED77FC6FD8E1D /* Pods_SimpleToDoList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3DCD222523D7D2F7D27D453 /* Pods_SimpleToDoList.framework */; };
 		FB65289DF391199D5FAB89F7 /* Pods_SimpleToDoListUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E58B1C7DBAA55F9A6CE2C9 /* Pods_SimpleToDoListUITests.framework */; };
@@ -91,6 +93,8 @@
 		68CDE18B21B191EC0084EA7C /* ActivityIndicatorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorType.swift; sourceTree = "<group>"; };
 		68CDE18D21B1920F0084EA7C /* SVActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVActivityIndicator.swift; sourceTree = "<group>"; };
 		68CDE19221B1D5080084EA7C /* ToDoDetailsConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoDetailsConstants.swift; sourceTree = "<group>"; };
+		68CDE19521B1FDE10084EA7C /* ToDoDBServiceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoDBServiceType.swift; sourceTree = "<group>"; };
+		68CDE19721B1FE180084EA7C /* RealmToDoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmToDoService.swift; sourceTree = "<group>"; };
 		68ED8514C4B1F7A67A00FA82 /* Pods-SimpleToDoList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleToDoList.release.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleToDoList/Pods-SimpleToDoList.release.xcconfig"; sourceTree = "<group>"; };
 		8953A84F7D2E121DFA2B3E3E /* Pods-SimpleToDoListTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleToDoListTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleToDoListTests/Pods-SimpleToDoListTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C1B4095FF9DBA2C4B2CA8DBF /* Pods-SimpleToDoList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleToDoList.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimpleToDoList/Pods-SimpleToDoList.debug.xcconfig"; sourceTree = "<group>"; };
@@ -219,6 +223,7 @@
 		68CDE16021B13FC60084EA7C /* Skeleton */ = {
 			isa = PBXGroup;
 			children = (
+				68CDE19421B1FDC20084EA7C /* Service */,
 				68CDE18A21B191DA0084EA7C /* ActivityIndicator */,
 				68CDE16C21B141E30084EA7C /* Result */,
 				68CDE16621B140870084EA7C /* Constants */,
@@ -316,6 +321,15 @@
 				68CDE18D21B1920F0084EA7C /* SVActivityIndicator.swift */,
 			);
 			path = ActivityIndicator;
+			sourceTree = "<group>";
+		};
+		68CDE19421B1FDC20084EA7C /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				68CDE19521B1FDE10084EA7C /* ToDoDBServiceType.swift */,
+				68CDE19721B1FE180084EA7C /* RealmToDoService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		E462D9DF984B60F0281A3A93 /* Pods */ = {
@@ -517,6 +531,8 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-SimpleToDoList/Pods-SimpleToDoList-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
 			);
@@ -526,6 +542,8 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
 			);
@@ -566,6 +584,7 @@
 				68CDE15621B13EBA0084EA7C /* Scene.swift in Sources */,
 				68CDE15C21B13F3C0084EA7C /* SceneCoordinator.swift in Sources */,
 				68CDE17F21B164A50084EA7C /* ToDoItem.swift in Sources */,
+				68CDE19821B1FE180084EA7C /* RealmToDoService.swift in Sources */,
 				68CDE19321B1D5080084EA7C /* ToDoDetailsConstants.swift in Sources */,
 				68CDE15A21B13F220084EA7C /* SceneCoordinatorType.swift in Sources */,
 				68CDE16921B140A70084EA7C /* NetworkManagerType.swift in Sources */,
@@ -574,6 +593,7 @@
 				68CDE17621B143800084EA7C /* HomeViewController.swift in Sources */,
 				68CDE12721B13DE30084EA7C /* AppDelegate.swift in Sources */,
 				68CDE18221B165600084EA7C /* ToDoItemViewModel.swift in Sources */,
+				68CDE19621B1FDE10084EA7C /* ToDoDBServiceType.swift in Sources */,
 				68CDE17021B142610084EA7C /* MoyaNetworkManager.swift in Sources */,
 				68CDE17821B1520A0084EA7C /* HomeConstants.swift in Sources */,
 				68CDE17B21B162E90084EA7C /* ToDoDetailsPresenter.swift in Sources */,
