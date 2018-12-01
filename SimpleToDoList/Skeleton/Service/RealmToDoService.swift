@@ -13,6 +13,10 @@ final class RealmToDoService: ToDoDBServiceType {
     func store(todoItems: [ToDoItem]) {
         let realm = try! Realm()
         
+        try! realm.write {
+            realm.deleteAll()
+        }
+        
         for item in todoItems {
             try! realm.write {
                 realm.add(item)
@@ -22,9 +26,7 @@ final class RealmToDoService: ToDoDBServiceType {
     
     func getTodoItems() -> [ToDoItem] {
         let realm = try! Realm()
-        
         let items = Array(realm.objects(ToDoItem.self))
-        
         return items
     }
 }

@@ -29,11 +29,14 @@ final class HomePresenter: HomePresentationLogic {
     private let networkManager: NetworkManagerType
     private let activityIndicator: ActivityIndicatorType
     private let todoDBService: ToDoDBServiceType
+    private let reachabilityManager: ReachabilityManagerType
     
-    init(networkManager: NetworkManagerType = MoyaNetworkManager.shared, activityIndicator: ActivityIndicatorType = SVActivityIndicator.shared, todoDBService: ToDoDBServiceType = RealmToDoService()) {
+    init(networkManager: NetworkManagerType = MoyaNetworkManager.shared, activityIndicator: ActivityIndicatorType = SVActivityIndicator.shared, todoDBService: ToDoDBServiceType = RealmToDoService(), reachabilityManager: ReachabilityManagerType = ReachabilityManager.shared) {
+        
         self.networkManager = networkManager
         self.activityIndicator = activityIndicator
         self.todoDBService = todoDBService
+        self.reachabilityManager = reachabilityManager
     }
     
     func goToAddScene(with viewModel: ToDoItemViewModel?) {
@@ -48,6 +51,13 @@ final class HomePresenter: HomePresentationLogic {
     
     func getToDoList(onComplete: @escaping ([ToDoItemViewModel]) -> Void) {
         activityIndicator.show(with: "Getting Your To Do Items...")
+        
+        if !reachabilityManager.isReachable() {
+            onComplete(todoDBService.getTodoItems().map { ToDoItemViewModel(with: $0) })
+            activityIndicator.dismiss()
+            return
+        }
+        
         let requestOnComplete: (Result<[ToDoItem]>) -> Void = { [weak self] result in
             self?.activityIndicator.dismiss()
             switch result {

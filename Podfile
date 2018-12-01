@@ -10,6 +10,7 @@ target 'SimpleToDoList' do
   pod 'Moya'
   pod 'RealmSwift'
   pod 'SVProgressHUD'
+  pod 'ReachabilitySwift'
 
   target 'SimpleToDoListTests' do
     inherit! :search_paths
