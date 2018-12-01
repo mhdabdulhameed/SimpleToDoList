@@ -27,8 +27,13 @@ final class MoyaNetworkManager: NetworkManagerType {
             switch result {
             case .success(let response):
                 do {
-                    let responseModel = try JSONDecoder().decode(T.self, from: response.data)
-                    onComplete(.success(responseModel))
+                    if T.self == IgnoredResponse.self {
+                        let responseModel = IgnoredResponse() as! T
+                        onComplete(Result.success(responseModel))
+                    } else {
+                        let responseModel = try JSONDecoder().decode(T.self, from: response.data)
+                        onComplete(.success(responseModel))
+                    }
                     
                 } catch let error {
                     onComplete(.failure(error))

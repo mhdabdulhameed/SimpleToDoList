@@ -74,21 +74,21 @@ final class HomePresenter: HomePresentationLogic {
     }
     
     func deleteToDoItem(with id: String, onComplete: @escaping (Bool) -> Void) {
-//        let requestOnComplete: (Result<()>) -> Void = { [weak self] result in
-//            self?.activityIndicator.dismiss()
-//            switch result {
-//            case .success(_):
-//                onComplete(true)
-//            case .failure(let error):
-//                // TODO show error.
-//                onComplete(false)
-//                print(error)
-//            }
-//        }
-//
-//        networkManager.startRequest(api: .deleteToDo(id: id), onComplete: requestOnComplete)
+        let requestOnComplete: (Result<IgnoredResponse>) -> Void = { [weak self] result in
+            self?.activityIndicator.dismiss()
+            switch result {
+            case .success(_):
+                onComplete(true)
+            case .failure(let error):
+                // TODO show error.
+                onComplete(false)
+                print(error)
+            }
+        }
+
+        networkManager.startRequest(api: .deleteToDo(id: id), onComplete: requestOnComplete)
         
-        onComplete(true)
+//        onComplete(true)
     }
     
     func markToDoItemCompleted(with id: String, title: String, completed: Bool, onComplete: @escaping (Bool) -> Void) {
