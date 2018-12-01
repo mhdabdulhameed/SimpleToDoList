@@ -87,8 +87,6 @@ final class HomePresenter: HomePresentationLogic {
         }
 
         networkManager.startRequest(api: .deleteToDo(id: id), onComplete: requestOnComplete)
-        
-//        onComplete(true)
     }
     
     func markToDoItemCompleted(with id: String, title: String, completed: Bool, onComplete: @escaping (Bool) -> Void) {
