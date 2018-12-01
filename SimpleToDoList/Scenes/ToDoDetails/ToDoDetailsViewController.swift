@@ -17,7 +17,6 @@ final class ToDoDetailsViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = label.font.withSize(28.0)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -80,8 +79,8 @@ final class ToDoDetailsViewController: UIViewController {
     
     private func setupTitleLabelConstraints() {
         titleLabel.centerXAnchor.constraint(equalTo: titleTextField.centerXAnchor).isActive = true
-        titleLabel.widthAnchor.constraint(equalTo: titleTextField.widthAnchor).isActive = true
-        titleLabel.bottomAnchor.constraint(equalTo: titleTextField.topAnchor, constant: -150.0).isActive = true
+        titleLabel.widthAnchor.constraint(equalTo: view.widthAnchor, constant: 0.8).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: titleTextField.topAnchor, constant: -20.0).isActive = true
         
         view.layoutIfNeeded()
     }
@@ -93,7 +92,7 @@ final class ToDoDetailsViewController: UIViewController {
     
     private func setupTitleTextFieldConstraints() {
         titleTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        titleTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        titleTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50.0).isActive = true
         titleTextField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6).isActive = true
         titleTextField.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
         
